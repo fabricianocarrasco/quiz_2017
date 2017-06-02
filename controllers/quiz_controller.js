@@ -38,11 +38,12 @@ exports.randomplay = function (req, res, next) {
             })
         .then(function (quiz){
         if(quiz){
+            if(req.session.score == req.session.array.length){
             req.session.array.push(quiz.id);
             res.render('quizzes/random_play',{
                 quiz:quiz,
                 score:req.session.score
-            });
+            });}
         }else{
             var score = req.session.score;
             req.session.score =0;
