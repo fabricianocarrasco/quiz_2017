@@ -27,13 +27,10 @@ exports.randomplay = function (req, res, next) {
     var random = Math.floor(Math.random()*models.Quiz.count());
     models.Quiz.count()
         .then(function (count) {
-           return models.Quiz.findAll({limit:1, offset:random});
+           return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}});
         })
-        .then(function(quiz){
-            if(array.indexOf(quiz.id)==-1){
-                randomplay;
-                return;
-            }
+        .then(function(quizzes){
+           quiz = quizzes[random];
             req.session.array.push(quiz.id);
             res.render('./quizzes/random_play', {
                 quiz: quiz,
