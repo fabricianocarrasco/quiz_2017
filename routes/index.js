@@ -19,10 +19,7 @@ router.get('/help', function(req, res, next) {
 // Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load);
 
-router.get('/quizzes/randomplay', function(req, res, next) {
-    res.render('./quizzes/random_play',{score:0,quiz:quizController.load()});
-});
-
+router.get('/quizzes/randomplay', quizController.randomplay);
 
 // Definición de rutas de /quizzes
 router.get('/quizzes',                     quizController.index);

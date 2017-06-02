@@ -19,8 +19,22 @@ exports.load = function (req, res, next, quizId) {
         next(error);
     });
 };
-
-
+//GET /quizzes/randomplay
+exports.randomplay = function (req, res, next) {
+ var random = MAth.random(0,models.Quiz.count());
+    models.Quiz.findAll({limit:1,offset:random})
+        .then(function (quiz) {
+            if (quiz) {
+                req.quiz = quiz;
+                res.render('quizzes/randomplay', {count:req.count,quiz: req.quiz});
+            } else {
+                randomplay;
+            }
+        })
+        .catch(function (error) {
+            next(error);
+        });
+};
 // GET /quizzes
 exports.index = function (req, res, next) {
 
