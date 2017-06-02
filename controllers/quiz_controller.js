@@ -21,8 +21,8 @@ exports.load = function (req, res, next, quizId) {
 };
 //GET /quizzes/randomplay
 exports.randomplay = function (req, res, next) {
-    if(!req.session.score) req.session.score = 0;
-    if(!req.session.array)  req.session.array = [-1];
+    req.session.score = req.session.score || 0;
+    req.session.array = req.session.array || [-1];
 
     models.Quiz.count()
         .then(function (count) {
