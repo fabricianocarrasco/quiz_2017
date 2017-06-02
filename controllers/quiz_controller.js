@@ -65,50 +65,6 @@ exports.randomplay = function (req, res, next) {
         });
 };
 
-exports.randomnomore = function (req, res, next) {
-    if(!req.session.score) req.session.score = 0;
-    if(!req.session.array)  req.session.array = [-1];
-
-    models.Quiz.count()
-        .then(function (count) {
-            return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}});
-        })
-        .then(function(quizzes){
-            if(quizzes.length>0)
-                return quizzes[parseInt(Math.random()*quizzes.length)];
-            else
-                return null;
-
-
-        })
-        .then(function (quiz){
-            if(quiz){
-                if(req.session.score == req.session.array.length-1){
-                    req.session.array.push(quiz.id);
-                    res.render('quizzes/random_play',{
-                        quiz:quiz,
-                        score:req.session.score
-                    });} else{
-                    res.render('quizzes/random_play',{
-                        quiz:quiz,
-                        score:req.session.score
-                    });
-                }
-            }else{
-                var score = req.session.score;
-                req.session.score =0;
-                req.session.array = [-1];
-                res.render('quizzes/random_nomore',{
-                    score:score
-                });
-            }
-        })
-
-        .catch(function (error) {
-            req.flash('error','Error al cargar el Quiz: '+error.message)
-            next(error);
-        });
-};
 
 exports.randomcheck = function (req, res, next) {
 

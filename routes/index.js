@@ -20,7 +20,6 @@ router.get('/help', function(req, res, next) {
 router.param('quizId', quizController.load);
 
 router.get('/quizzes/randomplay', quizController.randomplay);
-router.get('/quizzes/randomnomore', quizController.randomnomore);
 router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
 // Definición de rutas de /quizzes
 router.get('/quizzes',                     quizController.index);
