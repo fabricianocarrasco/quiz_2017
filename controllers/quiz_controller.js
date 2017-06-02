@@ -109,6 +109,23 @@ exports.randomnomore = function (req, res, next) {
             next(error);
         });
 };
+
+exports.check = function (req, res, next) {
+
+    var answer = req.query.answer || "";
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    if(!result){
+        req.session.score =0;
+        req.session.array =[-1];
+    }
+    res.render('quizzes/random_result', {
+        score:req.session.score,
+        quiz: req.quiz,
+        result: result,
+        answer: answer
+    });
+};
 // GET /quizzes
 exports.index = function (req, res, next) {
 
