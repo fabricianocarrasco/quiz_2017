@@ -26,7 +26,7 @@ exports.randomplay = function (req, res, next) {
         .then(function (quiz) {
             if (quiz) {
                 req.quiz = quiz;
-                res.render('quizzes/randomplay', {count:req.count,quiz: req.quiz});
+                res.render('./quizzes/random_play', {count:req.count,quiz: req.quiz});
             } else {
                 randomplay;
             }
