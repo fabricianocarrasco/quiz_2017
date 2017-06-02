@@ -44,7 +44,10 @@ exports.randomplay = function (req, res, next) {
                 quiz:quiz,
                 score:req.session.score
             });} else{
-                randomplay;
+                res.render('quizzes/random_play',{
+                    quiz:quiz,
+                    score:req.session.score
+                });
             }
         }else{
             var score = req.session.score;
