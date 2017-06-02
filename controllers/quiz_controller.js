@@ -38,7 +38,7 @@ exports.randomplay = function (req, res, next) {
             })
         .then(function (quiz){
         if(quiz){
-            if(req.session.score == req.session.array.length){
+            if(req.session.score == req.session.array.length-1){
             req.session.array.push(quiz.id);
             res.render('quizzes/random_play',{
                 quiz:quiz,
