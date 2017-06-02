@@ -110,7 +110,7 @@ exports.randomnomore = function (req, res, next) {
         });
 };
 
-exports.check = function (req, res, next) {
+exports.randomcheck = function (req, res, next) {
 
     var answer = req.query.answer || "";
 
