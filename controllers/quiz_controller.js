@@ -21,25 +21,40 @@ exports.load = function (req, res, next, quizId) {
 };
 //GET /quizzes/randomplay
 exports.randomplay = function (req, res, next) {
-    req.session.score = req.session.score || 0;
-    req.session.array = req.session.array || [-1];
+    if(!req.session.score) req.session.score = 0;
+    if(!req.session.array)  req.session.array = [-1];
 
-    var random = Math.floor(Math.random()*models.Quiz.count());
     models.Quiz.count()
         .then(function (count) {
            return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}});
         })
         .then(function(quizzes){
-           quiz = quizzes[random];
+            if(quizzes.length>0)
+                return quizzes[parseInt(Math.random()*quizzes.length)];
+                else
+                    return null;
+
+
+            })
+        .then(function (quiz){
+        if(quiz){
             req.session.array.push(quiz.id);
-            res.render('./quizzes/random_play', {
-                quiz: quiz,
-                score: req.session.score
+            res.render('quizzes/random_play',{
+                quiz:quiz,
+                score:req.session.score
             });
+        }else{
+            var score = req.session.score;
+            req.session.score =0;
+            req.session.array = [-1];
+            res.render('quizzes/random_nomore',{
+                score:score
+            });
+        }
+    })
 
-
-        })
         .catch(function (error) {
+            req.flash('error','Error al cargar el Quiz: '+error.message)
             next(error);
         });
 };
