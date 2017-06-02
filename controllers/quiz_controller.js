@@ -21,15 +21,26 @@ exports.load = function (req, res, next, quizId) {
 };
 //GET /quizzes/randomplay
 exports.randomplay = function (req, res, next) {
- var random = Math.floor(Math.random()*models.Quiz.count());
-    models.Quiz.findAll({limit:1,offset:random})
-        .then(function (quiz) {
-            if (quiz) {
-                req.quiz = quiz;
-                res.render('./quizzes/random_play', {score:req.score||0,quiz: req.quiz});
-            } else {
+    req.session.score = req.session.score || 0;
+    req.session.array = req.session.array || [-1];
+
+    var random = Math.floor(Math.random()*models.Quiz.count());
+    models.Quiz.count()
+        .then(function (count) {
+           return models.Quiz.findAll({limit:1, offset:random});
+        })
+        .then(function(quiz){
+            if(array.indexOf(quiz.id)==-1){
                 randomplay;
+                return;
             }
+            req.session.array.push(quiz.id);
+            res.render('./quizzes/random_play', {
+                quiz: quiz,
+                score: req.session.score
+            });
+
+
         })
         .catch(function (error) {
             next(error);
