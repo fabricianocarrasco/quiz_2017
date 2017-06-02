@@ -21,7 +21,7 @@ exports.load = function (req, res, next, quizId) {
 };
 //GET /quizzes/randomplay
 exports.randomplay = function (req, res, next) {
- var random = MAth.random(0,models.Quiz.count());
+ var random = Math.random(0,models.Quiz.count());
     models.Quiz.findAll({limit:1,offset:random})
         .then(function (quiz) {
             if (quiz) {
