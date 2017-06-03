@@ -5,14 +5,12 @@
         <% var tip = tips[i]; %>
 
         <li>
-
-            <% if (tip.accepted ||
-                    (session.user && (session.user.isAdmin || (quizAuthorId && quizAuthorId === session.user.id)))) { %>
-
-                <%= tip.text %>
+            <%= tip.text %>
+            <% if (!tip.accepted ){
+            %> (por comprobar)<% } %>
                 <span id="autor">(by <%= tip.Author ? tip.Author.username : "Anómino" %>)</span>
 
-            <% } %>
+
 
             <% if (!tip.accepted &&
                     (session.user && (session.user.isAdmin || (quizAuthorId && quizAuthorId === session.user.id)))) { %>
