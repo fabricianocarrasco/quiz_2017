@@ -151,7 +151,8 @@ exports.index = function (req, res, next) {
     .then(function (quizzes) {
         res.render('quizzes/index.ejs', {
             quizzes: quizzes,
-            search: search
+            search: search,
+            title:title,
         });
     })
     .catch(function (error) {
