@@ -10,7 +10,7 @@
                     (session.user && (session.user.isAdmin || (quizAuthorId && quizAuthorId === session.user.id)))) { %>
 
                 <%= tip.text %>
-                <span id="autor"></span>
+                <span id="autor"><%= tip.AuthorId %></span>
 
             <% } %>
 
