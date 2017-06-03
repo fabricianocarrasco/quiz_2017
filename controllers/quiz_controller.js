@@ -24,26 +24,7 @@ exports.load = function (req, res, next, quizId) {
         next(error);
     });
 };
-exports.loadAll = function (req, res, next) {
 
-    models.Quiz.findAll( {
-        include: [
-            {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
-            {model: models.User, as: 'Author'}
-        ]
-    })
-        .then(function (quizzes) {
-            if (quizzes) {
-                req.quizzes = quizzes;
-                next();
-            } else {
-                throw new Error('No existe ningún quiz con id=' + quizId);
-            }
-        })
-        .catch(function (error) {
-            next(error);
-        });
-};
 //GET /quizzes/randomplay
 exports.randomplay = function (req, res, next) {
     req.session.score = req.session.score || 0;
@@ -51,7 +32,12 @@ exports.randomplay = function (req, res, next) {
 
     models.Quiz.count()
         .then(function (count) {
-           return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}});
+           return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}},{
+               include: [
+                   {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
+                   {model: models.User, as: 'Author'}
+               ]
+           });
         })
         .then(function(quizzes){
             if(quizzes.length>0)
@@ -143,7 +129,12 @@ exports.index = function (req, res, next) {
         title = "Preguntas de " + req.user.username;
     }
 
-    models.Quiz.count(countOptions)
+    models.Quiz.count(countOptions,{
+        include: [
+            {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
+            {model: models.User, as: 'Author'}
+        ]
+    })
     .then(function (count) {
 
         // Paginacion:
