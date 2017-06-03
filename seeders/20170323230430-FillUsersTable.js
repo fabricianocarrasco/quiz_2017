@@ -23,6 +23,7 @@ module.exports = {
                 username: 'pepe',
                 password: encryptPassword('5678', 'bbbb'),
                 salt: 'bbbb',
+                isAdmin: false,
                 createdAt: new Date(), updatedAt: new Date()
             }
         ]);
