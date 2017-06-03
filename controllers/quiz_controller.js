@@ -41,17 +41,12 @@ exports.randomplay = function (req, res, next) {
         })
         .then(function (quiz){
             if(quiz){
-                if(req.session.score == req.session.array.length-1){
-                    req.session.array.push(quiz.id);
-                    res.render('quizzes/random_play',{
-                        quiz:quiz,
-                        score:req.session.score
-                    });} else{
+
                     res.render('quizzes/random_play',{
                         quiz:quiz,
                         score:req.session.score
                     });
-                }
+
             }else{
                 var score = req.session.score;
                 req.session.score =0;
@@ -96,7 +91,8 @@ exports.randomcheck = function (req, res, next) {
         req.session.score =0;
         req.session.array =[-1];
     }else{
-    req.session.score +=1;}
+    req.session.score +=1;
+    req.session.array.push(req.quiz.id);}
     res.render('quizzes/random_result', {
         score:req.session.score,
         quiz: req.quiz,
