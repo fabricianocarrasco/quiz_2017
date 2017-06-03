@@ -32,7 +32,7 @@
     <% var tip = tips[i]; %>
 
     <li>
-
+        <%= tip.text %>
         <% if (tip.accepted ||
                 (session.user && (session.user.isAdmin || (quizAuthorId && quizAuthorId === session.user.id)))) { %>
 
