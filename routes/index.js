@@ -51,6 +51,7 @@ router.get('/help', function(req, res, next) {
 });
 // Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load);
+router.param('quizzes', quizController.loadAll);
 router.param('userId', userController.load);
 router.param('tipId',  tipController.load);
 
