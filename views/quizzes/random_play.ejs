@@ -11,7 +11,7 @@
     <p>
         Pregunta: <b><%= quiz.question %></b>
     </p>
-
+    <b><%= models.User.findById(quiz.AuthorId).username %></b>
     <div class="wideRow">
         <input type="text" class="itemWide" id="answer" name="answer" value="" placeholder="Respuesta" autocomplete="off"/>
         <input type="submit" class="itemNarrow" id="send" value="Comprobar">
@@ -22,9 +22,6 @@
     Pistas:
 </h1>
 
-<% if (session.user) { %>
-<% include ../tips/new %>
-<% } %>
 
 <% var tips = quiz.Tips; %>
 <% var quizId = quiz.id; %>
