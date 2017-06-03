@@ -12,7 +12,7 @@
     <p>
         Pregunta: <b><%= quiz.question %></b>
     </p>
-    <b><%= User.findById(quiz.AuthorId).username %></b>
+    <b><%= quiz.User.username %></b>
     <div class="wideRow">
         <input type="text" class="itemWide" id="answer" name="answer" value="" placeholder="Respuesta" autocomplete="off"/>
         <input type="submit" class="itemNarrow" id="send" value="Comprobar">
