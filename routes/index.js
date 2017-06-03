@@ -49,9 +49,6 @@ router.get('/author', function (req, res, next) {
 router.get('/help', function(req, res, next) {
   res.render('help');
 });
-
-
-
 // Autoload de rutas que usen :quizId
 router.param('quizId', quizController.load);
 router.param('userId', userController.load);
@@ -91,7 +88,8 @@ router.delete('/users/:userId(\\d+)',
 router.get('/users/:userId(\\d+)/quizzes', quizController.index);     // ver las preguntas de un usuario
 
 
-
+router.get('/quizzes/randomplay', quizController.randomplay);
+router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
 // Definición de rutas de /quizzes
 router.get('/quizzes',
     quizController.index);

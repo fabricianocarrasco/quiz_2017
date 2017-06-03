@@ -24,7 +24,49 @@ exports.load = function (req, res, next, quizId) {
         next(error);
     });
 };
+//GET /quizzes/randomplay
+exports.randomplay = function (req, res, next) {
+    req.session.score = req.session.score || 0;
+    req.session.array = req.session.array || [-1];
 
+    models.Quiz.count()
+        .then(function (count) {
+           return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}});
+        })
+        .then(function(quizzes){
+            if(quizzes.length>0)
+                return quizzes[parseInt(Math.random()*quizzes.length)];
+                else
+                    return null;
+        })
+        .then(function (quiz){
+            if(quiz){
+                if(req.session.score == req.session.array.length-1){
+                    req.session.array.push(quiz.id);
+                    res.render('quizzes/random_play',{
+                        quiz:quiz,
+                        score:req.session.score
+                    });} else{
+                    res.render('quizzes/random_play',{
+                        quiz:quiz,
+                        score:req.session.score
+                    });
+                }
+            }else{
+                var score = req.session.score;
+                req.session.score =0;
+                req.session.array = [-1];
+                res.render('quizzes/random_nomore',{
+                    score:score
+                });
+            }
+        })
+
+        .catch(function (error) {
+            req.flash('error','Error al cargar el Quiz: '+error.message)
+            next(error);
+        });
+};
 
 // MW que permite acciones solamente si al usuario logeado es admin o es el autor del quiz.
 exports.adminOrAuthorRequired = function(req, res, next){
@@ -41,6 +83,27 @@ exports.adminOrAuthorRequired = function(req, res, next){
 };
 
 
+
+
+
+
+exports.randomcheck = function (req, res, next) {
+
+    var answer = req.query.answer || "";
+
+    var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
+    if(!result){
+        req.session.score =0;
+        req.session.array =[-1];
+    }else{
+    req.session.score +=1;}
+    res.render('quizzes/random_result', {
+        score:req.session.score,
+        quiz: req.quiz,
+        result: result,
+        answer: answer
+    });
+};
 // GET /quizzes
 exports.index = function (req, res, next) {
 
@@ -82,15 +145,13 @@ exports.index = function (req, res, next) {
 
         findOptions.offset = items_per_page * (pageno - 1);
         findOptions.limit = items_per_page;
-        findOptions.include = [{model: models.User, as: 'Author'}];
 
         return models.Quiz.findAll(findOptions);
     })
     .then(function (quizzes) {
         res.render('quizzes/index.ejs', {
             quizzes: quizzes,
-            search: search,
-            title: title
+            search: search
         });
     })
     .catch(function (error) {
@@ -188,7 +249,7 @@ exports.destroy = function (req, res, next) {
     req.quiz.destroy()
     .then(function () {
         req.flash('success', 'Quiz borrado con éxito.');
-        res.redirect('/goback');
+        res.redirect('/quizzes');
     })
     .catch(function (error) {
         req.flash('error', 'Error al editar el Quiz: ' + error.message);
