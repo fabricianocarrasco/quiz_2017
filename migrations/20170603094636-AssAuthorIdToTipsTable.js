@@ -4,11 +4,11 @@ module.exports = {
   up: function (queryInterface, Sequelize) {
    return queryInterface.addColumn(
        'Tips',
-       'UserId',
+       'AuthorId',
        {type:Sequelize.INTEGER}
    );
   },
 
   down: function (queryInterface, Sequelize) {
-   return queryInterface.removeColumn('Tips','UserId');}
+   return queryInterface.removeColumn('Tips','AuthorId');}
 };

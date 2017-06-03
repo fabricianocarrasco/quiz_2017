@@ -8,7 +8,7 @@ exports.load = function (req, res, next, tipId) {
     models.Tip.findById(tipId, {
         include: [
             models.Quiz,
-            models.User,
+            {model: models.User, as: 'Author'}
         ]
     })
     .then(function (tip) {
