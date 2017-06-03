@@ -145,10 +145,10 @@ exports.index = function (req, res, next) {
         return models.Quiz.findAll(findOptions);
     })
     .then(function (quizzes) {
-        res.render('quizzes/index.ejs', {
+        res.render('quizzes/index', {
             quizzes: quizzes,
             search: search,
-            title:title,
+            title: title,
         });
     })
     .catch(function (error) {
