@@ -38,7 +38,7 @@ exports.randomplay = function (req, res, next) {
         {model: models.User, as: 'Author'};
     models.Quiz.count()
         .then(function (count) {
-           return models.Quiz.findAll(findOptions)
+           return models.Quiz.findAll(findOptions)})
         .then(function(quizzes){
             if(quizzes.length>0)
                 return quizzes[parseInt(Math.random()*quizzes.length)];
