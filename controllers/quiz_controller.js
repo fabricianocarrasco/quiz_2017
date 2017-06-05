@@ -29,16 +29,16 @@ exports.load = function (req, res, next, quizId) {
 exports.randomplay = function (req, res, next) {
     req.session.score = req.session.score || 0;
     req.session.array = req.session.array || [-1];
-
+    var findOptions = {
+        where: {},
+        include:{}
+    };
+    findOptions.where.id = {$notIn :req.session.array};
+    findOptions.include = {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
+        {model: models.User, as: 'Author'};
     models.Quiz.count()
         .then(function (count) {
-           return models.Quiz.findAll({where:{id:{$notIn :req.session.array}}},{
-               include: [
-                   {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
-                   {model: models.User, as: 'Author'}
-               ]
-           });
-        })
+           return models.Quiz.findAll(findOptions)
         .then(function(quizzes){
             if(quizzes.length>0)
                 return quizzes[parseInt(Math.random()*quizzes.length)];
@@ -110,7 +110,8 @@ exports.randomcheck = function (req, res, next) {
 exports.index = function (req, res, next) {
 
     var countOptions = {
-        where: {}
+        where: {},
+        include:{}
     };
 
     var title = "Preguntas";
@@ -128,13 +129,11 @@ exports.index = function (req, res, next) {
         countOptions.where.AuthorId = req.user.id;
         title = "Preguntas de " + req.user.username;
     }
-
-    models.Quiz.count(countOptions,{
-        include: [
-            {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
-            {model: models.User, as: 'Author'}
-        ]
-    })
+    countOptions.include = [
+        {model: models.Tip, include:[{model: models.User, as: 'Author'}]},
+        {model: models.User, as: 'Author'}
+    ];
+    models.Quiz.count(countOptions)
     .then(function (count) {
 
         // Paginacion:
